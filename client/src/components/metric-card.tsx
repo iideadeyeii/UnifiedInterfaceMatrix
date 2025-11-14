@@ -22,22 +22,24 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <Card className={className}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+    <Card className={cn("hover-elevate transition-all duration-200 backdrop-blur-sm", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 gap-2">
+        <CardTitle className="text-sm font-semibold uppercase tracking-wider">{title}</CardTitle>
+        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 shadow-[0_0_15px_rgba(0,100,255,0.1)]">
+          <Icon className="h-4 w-4 text-primary" />
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-semibold font-mono" data-testid={`metric-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+        <div className="text-3xl font-bold font-mono text-foreground mb-1" data-testid={`metric-${title.toLowerCase().replace(/\s+/g, '-')}`}>
           {value}
         </div>
         {(subtitle || trendValue) && (
-          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1.5">
             {trendValue && (
               <span className={cn(
-                "font-medium",
-                trend === "up" && "text-green-500",
-                trend === "down" && "text-red-500"
+                "font-semibold text-sm",
+                trend === "up" && "text-secondary",
+                trend === "down" && "text-destructive"
               )}>
                 {trend === "up" ? "↑" : "↓"} {trendValue}
               </span>
