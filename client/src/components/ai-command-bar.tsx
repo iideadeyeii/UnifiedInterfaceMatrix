@@ -66,7 +66,7 @@ export function AiCommandBar({
               value={command}
               onChange={(e) => setCommand(e.target.value)}
               disabled={isLoading}
-              data-testid="input-ai-command"
+              data-testid="input-command"
               className="flex-1"
             />
             <Button
@@ -83,17 +83,19 @@ export function AiCommandBar({
           </div>
 
           {result && (
-            <div className="border rounded-md p-4 space-y-2 bg-muted/50">
+            <div className="border rounded-md p-4 space-y-2 bg-muted/50" data-testid="container-ai-response">
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="uppercase text-xs">
-                  {result.intent.replace(/_/g, " ")}
+                  {(result.intent || "unknown").replace(/_/g, " ")}
                 </Badge>
-                <span className="text-xs text-muted-foreground">
-                  Confidence: {(result.confidence * 100).toFixed(0)}%
-                </span>
+                {typeof result.confidence === "number" && (
+                  <span className="text-xs text-muted-foreground">
+                    Confidence: {(result.confidence * 100).toFixed(0)}%
+                  </span>
+                )}
               </div>
               <p className="text-sm" data-testid="text-ai-response">
-                {result.message}
+                {result.message || "No response message"}
               </p>
             </div>
           )}
