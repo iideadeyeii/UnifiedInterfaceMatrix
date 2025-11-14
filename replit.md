@@ -156,3 +156,63 @@ Preferred communication style: Simple, everyday language.
 6. **Theme System**: Dark mode as default with localStorage persistence
 7. **Component Isolation**: Feature-specific components (GPU monitor, camera grid, etc.) as standalone modules
 8. **Zero-Config Development**: Vite handles all bundling, HMR, and dev server configuration
+
+## Deployment
+
+### Production Deployment (Docker)
+
+The application is packaged for deployment to mini-sparx (192.168.1.12) using Docker containers.
+
+**Quick Start**:
+```bash
+# 1. Transfer files to mini-sparx
+scp -r . mini-sparx:/opt/unified-dash/
+
+# 2. SSH into mini-sparx
+ssh mini-sparx
+cd /opt/unified-dash
+
+# 3. Configure environment
+cp .env.example .env
+nano .env  # Add tokens and keys
+
+# 4. Deploy
+./deploy.sh
+```
+
+**Access**: http://192.168.1.12:5050
+
+**Key Files**:
+- `Dockerfile` - Multi-stage container build
+- `docker-compose.yml` - Service orchestration
+- `.env.example` - Configuration template
+- `deploy.sh` - Automated deployment script
+- `DEPLOYMENT.md` - Complete deployment guide
+
+**Environment Variables**:
+- `SESSION_SECRET` - Session encryption key
+- `HOME_ASSISTANT_TOKEN` - HA long-lived access token
+- `OPENAI_API_KEY` - Optional, for AI command bar
+- `BIG_BOX_HOST` - big-box IP (default: 192.168.1.232)
+- `MINI_SPARX_HOST` - mini-sparx IP (default: 192.168.1.12)
+- `HOME_ASSISTANT_HOST` - HA IP (default: 192.168.1.34)
+- `MCP_SERVER_URL` - MCP endpoint (default: http://192.168.1.12:8888)
+- `VISION_API_URL` - Vision API endpoint (default: http://192.168.1.232:5005)
+- `LM_STUDIO_URL` - LM Studio endpoint (default: http://192.168.1.232:1234)
+
+**Integration Points**:
+- Monitors 36+ services across mini-sparx, big-box, and Home Assistant
+- Real-time GPU metrics from big-box (2x RTX 6000 Blackwell)
+- Storage monitoring across 19.3 TB infrastructure
+- Camera feeds from 7 Reolink cameras
+- Home Assistant entity statistics (443 entities)
+- Vision Caption API integration
+- MCP server communication for container management
+
+**Resource Requirements**:
+- CPU: ~0.5-1 core
+- RAM: ~256-512 MB
+- Storage: ~200 MB (container image)
+- Network: Access to all infrastructure nodes
+
+See `DEPLOYMENT.md` for complete instructions, troubleshooting, and advanced configuration.
