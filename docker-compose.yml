@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  unified-dash:
+    build: .
+    container_name: unified-dash
+    restart: unless-stopped
+    ports:
+      - "5050:5000"
+    environment:
+      - NODE_ENV=production
+      - SESSION_SECRET=${SESSION_SECRET}
+      - AI_INTEGRATIONS_OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
+      # Infrastructure endpoints
+      - BIG_BOX_HOST=${BIG_BOX_HOST:-192.168.1.232}
+      - MINI_SPARX_HOST=${MINI_SPARX_HOST:-192.168.1.12}
+      - HOME_ASSISTANT_HOST=${HOME_ASSISTANT_HOST:-192.168.1.34}
+      - HOME_ASSISTANT_TOKEN=${HOME_ASSISTANT_TOKEN}
+      # MCP Server
+      - MCP_SERVER_URL=${MCP_SERVER_URL:-http://192.168.1.12:8888}
+      # Vision API
+      - VISION_API_URL=${VISION_API_URL:-http://192.168.1.232:5005}
+      # LM Studio
+      - LM_STUDIO_URL=${LM_STUDIO_URL:-http://192.168.1.232:1234}
+    networks:
+      - unified-dash-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "caddy.reverse_proxy={{upstreams 5000}}"
+      - "caddy.handle_path=/dash*"
+
+networks:
+  unified-dash-network:
+    driver: bridge
